@@ -26,9 +26,6 @@ jobs:
 
     env:
       TF_WORKSPACE: ${{ inputs.environment }}
-      CRED: ${{ 
-        inputs.environment == 'dev' && secrets.CRED 
-        inputs.environment == 'uat' && secrets.CRED }}
 
     steps:
       - name: Checkout Code

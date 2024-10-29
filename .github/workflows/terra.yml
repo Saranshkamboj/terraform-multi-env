@@ -14,7 +14,6 @@ on:
         options:
           - dev
           - uat
-          - prod
       branch:
         description: 'Branch to deploy from'
         required: true
@@ -27,7 +26,9 @@ jobs:
 
     env:
       TF_WORKSPACE: ${{ inputs.environment }}
-      CRED: ${{ secrets[format('{0}_AZURE_CREDENTIALS', inputs.environment | upper)] }}
+      CRED: ${{ 
+        inputs.environment == 'dev' && secrets.CRED || 
+        inputs.environment == 'uat' && secrets.CRED || }}
 
     steps:
       - name: Checkout Code

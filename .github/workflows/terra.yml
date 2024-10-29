@@ -38,7 +38,25 @@ jobs:
         uses: hashicorp/setup-terraform@v1
         with:
           terraform_version: 1.3.0 # Specify your Terraform version here
- 
+
+      - name: Set Environment-Specific Azure Credentials
+        id: set_creds
+        run: |
+          if [ "${{ inputs.environment }}" == "dev" ]; then
+            echo "CRED=${{ secrets.CRED }}" >> $GITHUB_ENV
+          elif [ "${{ inputs.environment }}" == "uat" ]; then
+            echo "CRED=${{ secrets.CRED }}" >> $GITHUB_ENV
+          elif [ "${{ inputs.environment }}" == "prod" ]; then
+            echo "CRED=${{ secrets.CRED }}" >> $GITHUB_ENV
+          fi
+
+      - name: Parse Azure Credentials
+        id: parse_credentials
+        run: |
+          echo "ARM_CLIENT_ID=$(echo '${{ env.CRED }}' | jq -r '.clientId')" >> $GITHUB_ENV
+          echo "ARM_CLIENT_SECRET=$(echo '${{ env.CRED }}' | jq -r '.clientSecret')" >> $GITHUB_ENV
+          echo "ARM_SUBSCRIPTION_ID=$(echo '${{ env.CRED }}' | jq -r '.subscriptionId')" >> $GITHUB_ENV
+          echo "ARM_TENANT_ID=$(echo '${{ env.CRED }}' | jq -r '.tenantId')" >> $GITHUB_ENV
      
       - name: Login to Azure
         uses: azure/login@v1

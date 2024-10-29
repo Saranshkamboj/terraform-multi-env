@@ -27,6 +27,7 @@ jobs:
 
     env:
       TF_WORKSPACE: ${{ inputs.environment }}
+      CRED: ${{ secrets[format('{0}_AZURE_CREDENTIALS', inputs.environment | upper)] }}
 
     steps:
       - name: Checkout Code

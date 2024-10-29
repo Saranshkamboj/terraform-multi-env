@@ -49,8 +49,8 @@ jobs:
 
 
       - name: Terraform Plan
-        run: terraform plan -var-file="environments/${{ inputs.environment }}/${{ variables.VARIABLES }}"
+        run: terraform plan -var-file="${{ inputs.environment }}.tfvars"
 
       - name: Terraform Apply
         if: github.ref == 'refs/heads/${{ inputs.branch }}'
-        run: terraform apply -auto-approve -var-file="environments/${{ inputs.environment }}/${{ variables.VARIABLES }}"
+        run: terraform apply -auto-approve -var-file=""${{ inputs.environment }}.tfvars"
